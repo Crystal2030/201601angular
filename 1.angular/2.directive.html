@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="helloModule">
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>directive</title>
+</head>
+<body>
+<div zfpx-color style="width: 100px; height: 100px" ng-controller="HelloCtrl">
+	{{user.username}}
+</div>
+</body>
+</html>
+<script src="../lib/angular/angular.js"></script>
+<script>
+	angular.module('helloModule', []);
+	//获取定义的模块
+	//当定义一个控制器之后，就会送一个$scope={}对象
+	angular.module('helloModule')
+			.controller('HelloCtrl', function($scope,$http){
+				/*var user = {
+					name: 'zfpx'
+				}*/
+
+				  /*$http 是对jquery ajax的封装
+				  这是我们model 也就是数据*/
+				$http.get('users.json').success(function(data){
+					$scope.user = data;
+				});
+
+			});
+
+	angular.module('helloModule')
+			.directive('zfpxColor', function(){
+				return {
+					/**
+					 * 链接函数
+					 * @param scope 代表当前的作用域
+					 * @param element 当前要增强的元素 是一个jQuery对象
+					 * @param attrs 当前所有属性的集合
+					 */
+					link: function(scope, element, attr){
+						element.css('color', 'red');
+						element.on('click', function(){
+							alert(element.html())
+						});
+					}
+				}
+			})
+</script>

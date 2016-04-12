@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html ng-app="helloModule">
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>filter</title>
+</head>
+<body>
+<div ng-controller="HelloCtrl">
+	{{name | uppercase}}
+</div>
+</body>
+</html>
+<script src="../lib/angular/angular.js"></script>
+<script>
+	angular.module('helloModule', []);
+	//获取定义的模块
+	//当定义一个控制器之后，就会送一个$scope={}对象
+	angular.module('helloModule')
+			.controller('HelloCtrl', function($scope,$timeout){
+				$scope.name = 'zfpx';
+
+			});
+</script>

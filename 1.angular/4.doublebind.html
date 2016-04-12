@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="helloModule">
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>angular</title>
+</head>
+<body>
+<div ng-controller="HelloCtrl">
+	<span>{{name}}</span>
+	<!--<input type="text" ng-model="name"/>-->
+	<input type="text" zfpx-model="name"/>
+</div>
+</body>
+</html>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloModule', []);
+//获取定义的模块
+//当定义一个控制器之后，就会送一个$scope={}对象
+angular.module('helloModule')
+		.controller('HelloCtrl', function($scope,$timeout){
+			$timeout(function(){
+				$scope.name = 'timeout';
+			}, 2000)
+
+		});
+
+angular.module('helloModule')
+		.directive('zfpxModel', function(){
+			return {
+				/**
+				 * 链接函数
+				 * @param scope 代表当前的作用域
+				 * @param element 当前要增强的元素 是一个jQuery对象
+				 * @param attrs 当前所有属性的集合
+				 */
+				link: function($scope, element, attr){
+					element.on('change', function(){
+						$scope.name = element.val();
+						console.log($scope.name);
+						$scope.$watch('name', function(){
+							element.val($scope.name);
+						});
+
+					})
+				}
+			}
+		})
+</script>
