@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html ng-app="zfpxMod">
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>directive</title>
+	<link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.min.css"/>
+</head>
+<body class="container">
+<dialog>
+	<div>这是dialog内部内容</div>
+</dialog>
+</body>
+</html>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('zfpxMod', []);
+angular.module('zfpxMod')
+		.directive('dialog', function(){
+			return {
+				//A:Attribute E:element M:Comment  C: class
+				restrict: 'AEMC',
+				replace: true,//会把指令本身替换掉
+				//保留原来指令的内部元素，并且自动插入到转换后的模版内部 具有ng-transclude 指令的元素内部
+				transclude: true,
+				template: '<div class="panel panel-default"><div class="panel-heading">Panel heading</div><div class="panel-body" ng-transclude>xxx</div></div>'
+			}
+		})
+</script>

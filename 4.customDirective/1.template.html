@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app="zfpxMod">
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>directive</title>
+	<link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<zf-student></zf-student><br/>
+<span zf-student></span><br/>
+<span class="zf-student"></span><br/>
+<!-- directive:zf-student -->
+</body>
+</html>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('zfpxMod', []);
+angular.module('zfpxMod')
+		.directive('zfStudent', function(){
+			return {
+				//A:Attribute E:element M:Comment  C: class
+				restrict: 'AEMC',
+				replace: true,//会把指令本身替换掉
+				template: '<div>name:zfpx </div>'
+			}
+		})
+</script>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html ng-app="zfpxMod">
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>directive</title>
+	<link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.min.css"/>
+</head>
+<body class="container">
+	<div ng-controller="zfpxCtrl">
+		张三:{{zhangsan}}
+		李四:{{lisi}}
+		<div at-person name="{{zhangsan}}"></div>
+		<div at-person name="{{lisi}}"></div>
+
+		<br/><br/>
+		张三:{{zhangsan}}
+		李四:{{lisi}}
+		<div eq-person name="{{zhangsan}}"></div>
+		<div eq-person name="{{lisi}}"></div>
+
+		<br/><br/>
+		张三:{{zhangsan}}
+		李四:{{lisi}}
+		<div add-person name="{{zhangsan}}" greet="greet(name)"></div>
+		<div add-person name="{{lisi}}" greet="greet(name)"></div>
+	</div>
+</body>
+</html>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('zfpxMod', []);
+angular.module('zfpxMod')
+		.controller('zfpxCtrl', function($scope){
+			$scope.zhangsan = 'zhangsan';
+			$scope.lisi = 'lisi';
+			$scope.greet = function(name){
+				alert('greet' + name);
+			};
+		})
+angular.module('zfpxMod')
+		.directive('atPerson', function(){
+			return {
+				//A:Attribute E:element M:Comment  C: class
+				restrict: 'AEMC',
+//				scope: true,//每个指令实例拥有自己独立的scope
+				scope:{
+					name: '@name'//代表当前scope上的name属性引用指令上name属性的字面量值
+				},
+				template: '<input type="text" ng-model="name"/><div>姓名：{{name}}</div>'
+			}
+		})
+		.directive('eqPerson', function(){
+			return {
+				//A:Attribute E:element M:Comment  C: class
+				restrict: 'AEMC',
+				scope:{
+					name: '=name'
+				},
+				template: '<input type="text" ng-model="name"/><div>姓名：{{name}}</div>'
+			}
+		})
+		.directive('addPerson', function(){
+			return {
+				//A:Attribute E:element M:Comment  C: class
+				restrict: 'AEMC',
+//				scope: true,//每个指令实例拥有自己独立的scope
+				scope:{
+					namexx: '=name',
+					greet:'&'//传递一个来自父scope的函数，稍后调用
+				},
+				template: '<input type="text" ng-model="namexx"/><div>姓名：{{namexx}}  ' +
+				'<button ng-click="greet({name:namexx})">打招呼</button></div>'
+			}
+		})
+</script>
