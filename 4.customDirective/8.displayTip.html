@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html ng-app="zfpxMod">
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>directive</title>
+	<link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.min.css"/>
+</head>
+<body class="container" ng-controller="zfpxCtrl">
+<form action="" name="userform" novalidate="novalidate">
+	<div class="form-group" ng-class="{'has-error': userform.email.$invalid && userform.email.$dirty}">
+		<label for="email" class="control-label">邮箱</label>
+		<input name="email" type="email" id="email" class="form-control" ng-model="user.email" ng-required="" ng-minlength="3"/>
+		<p class="help-block" ng-show="userform.email.$error.email">
+			邮箱输入不合法
+		</p>
+		<p class="help-block" ng-show="userform.email.$error.minlength">
+			邮箱最少长度为3
+		</p>
+	</div>
+	<div class="form-group">
+		<input type="button" class="btn btn-default" ng-disabled="userform.$pristine || (userform.$dirty && userform.$invalid)" value="提交"/>
+	</div>
+</form>
+<pre>
+	{{userform | json}}
+</pre>
+</body>
+</html>
+<script src="../lib/angular/angular.js"></script>
+<script>
+	angular.module('zfpxMod', []);
+	angular.module('zfpxMod')
+			.controller('zfpxCtrl', function($scope){
+				$scope.user = {};
+				$scope.userform = {};
+			})
+
+
+
+</script>

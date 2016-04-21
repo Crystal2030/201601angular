@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html ng-app="zfpxMod">
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>directive</title>
+	<link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.min.css"/>
+</head>
+<body class="container" ng-controller="zfpxCtrl">
+<form action="" name="userform" novalidate="novalidate">
+	<div class="form-group">
+		<label for="email" class="control-label">邮箱</label>
+		<input type="email" id="email" class="form-control" ng-model="email"/>
+	</div>
+	<div class="form-group">
+		<input type="button" class="btn btn-default" value="提交"/>
+	</div>
+</form>
+<pre>
+	{{userform | json}}
+</pre>
+</body>
+</html>
+<script src="../lib/angular/angular.js"></script>
+<script>
+	angular.module('zfpxMod', []);
+	angular.module('zfpxMod')
+			.controller('zfpxCtrl', function($scope){
+
+			})
+
+
+
+</script>

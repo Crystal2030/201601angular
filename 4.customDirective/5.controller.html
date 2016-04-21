@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html ng-app="zfpxMod">
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>directive</title>
+	<link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.min.css"/>
+</head>
+<body class="container" ng-controller="zfpxCtrl">
+	<girl >
+		<span kind="beautiful,clever"></span>
+	</girl>
+</body>
+</html>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('zfpxMod', []);
+angular.module('zfpxMod')
+		.controller('zfpxCtrl', function($scope){
+
+		})
+
+//过滤器服务的名字就是 过滤器名字+Filter
+angular.module('zfpxMod')
+		.directive('girl', function(){
+			return {
+				restrict: 'E',
+				scope: true,
+				//link用来将指令隔离开，controller用来定义可以复用的行为和可以提供给别的指令调用的方法
+				//link里的形参可以随便写
+				//controller里的形参命名是死的，是依赖注入进来的
+				controller: function($scope, $element, $attrs){
+					$scope.kinds = [];
+					this.add = function(kind){
+						$scope.kinds.push(kind);
+					}
+				},
+				template: '<div>Crystal {{kinds}}</div> ',
+				link: function($scope, element, attrs){
+					element.bind('click', function(){
+						alert($scope.kinds);
+					})
+				}
+			}
+		})
+	/**
+	 前缀查找，可以修改查找控制器的行为
+	 1. ？ 如果同级找不到，会赋null
+	 2. ^ 在同级和上级中查找指令
+	 3. ^? 在统计和上级中查找指令，找不到会赋与null
+	 4. 没有前缀 在同级中查找，找不到会报错
+	 */
+		.directive('kind', function(){
+			return {
+				require: 'girl',//表示当前指令依赖的其他指令
+				link: function(scope, element, attrs, girlCtrl){
+					attrs.kind.split(',').forEach(function(kind){
+						girlCtrl.add(kind);
+					})
+				}
+			}
+		})
+
+
+
+</script>
