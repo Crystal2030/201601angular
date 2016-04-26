@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html ng-app="zfpxMod">
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>directive</title>
+	<link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.min.css"/>
+</head>
+<body class="container" ng-controller="zfpxCtrl">
+<form action="" name="userform" novalidate="novalidate">
+	<div class="form-group" ng-class="{'has-error': userform.email.$invalid && userform.email.$dirty}">
+		<label for="email" class="control-label">邮箱</label>
+		<input name="email" zf-errors type="email" id="email" class="form-control" ng-model="user.email" ng-required="" ng-minlength="3"/>
+	</div>
+	<div class="form-group">
+		<input type="button" class="btn btn-default" ng-disabled="userform.$pristine || (userform.$dirty && userform.$invalid)" value="提交"/>
+	</div>
+</form>
+<pre>
+	{{userform | json}}
+</pre>
+</body>
+</html>
+<script src="../lib/angular/angular.js"></script>
+<script>
+	angular.module('zfpxMod', []);
+
+	//定义一个常量
+	angular.module('zfpxMod').constant('errors', {
+		'email': '邮箱不合法',
+		'minlength': '最小长度不够'
+	});
+
+	angular.module('zfpxMod')
+			.controller('zfpxCtrl', function($scope){
+				$scope.user = {};
+				$scope.userform = {};
+			})
+
+	angular.module('zfpxMod')
+			.directive('zfErrors', function($compile){
+				return {
+					restrict: 'A',
+					require :'ngModel',
+					link: function(scope, element, attrs, ngModel){
+						//动态生成DOM元素并自动插入大哦当前input的后面
+						//1. 生成一个独立的scope
+						var subScope = scope.$new(true);
+						//判断此字符输入是否合法
+						subScope.hasError = function(){
+							return ngModel.$invalid && ngModel.$dirty;
+						};
+						//得到错误对象
+						subScope.errors = function(){
+							return ngModel.$error;
+						};
+
+						//进行模版的编译
+						var tmpl = $compile('<p ng-repeat="(key, value) in errors()" ng-show="hasError()" class="help-block">{{key | error}}</p>');
+						//得到一个jquery对象
+						var tips = tmpl(subScope);
+						//插入到当前元素后面
+						element.after(tips);
+
+					}
+				}
+			});
+
+
+	angular.module('zfpxMod')
+			.filter('error', function(errors){
+				return function(input){
+					return errors[input];
+				}
+			})
+
+</script>

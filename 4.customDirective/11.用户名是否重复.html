@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html ng-app="zfpxMod">
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>directive</title>
+	<link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.min.css"/>
+</head>
+<body class="container" ng-controller="zfpxCtrl">
+<form action="" name="userform" novalidate="novalidate">
+	<div class="form-group" ng-class="{'has-error': userform.email.$invalid && userform.email.$dirty}">
+		<label for="username" class="control-label">邮箱</label>
+		<input name="username" zf-errors type="username" id="username" class="form-control" ng-model="user.username" ng-required="" ng-minlength="3"/>
+	</div>
+	<div class="form-group">
+		<input type="button" class="btn btn-default" ng-disabled="userform.$pristine || (userform.$dirty && userform.$invalid)" value="提交"/>
+	</div>
+</form>
+<pre>
+	{{userform | json}}
+</pre>
+</body>
+</html>
+<script src="../lib/angular/angular.js"></script>
+<script>
+	angular.module('zfpxMod', []);
+
+	angular.module('zfpxMod')
+			.controller('zfpxCtrl', function($scope){
+				$scope.user = {};
+				$scope.userform = {};
+			})
+
+	angular.module('zfpxMod')
+			.directive('unique', function($http){
+				return {
+					restrict: 'A',
+					require: 'ngModel',
+					link: function(scope, element, attrs){
+						scope.$watch(attrs['ngModel'], function(newVal){
+							$http({
+								method: 'POST',
+								headers: {'Content-Type': 'application/json'},
+								url: 'http://localhost:8080/user/check',
+								data: newVal
+							}).success(function(data, status, headers, conf){
+								//响应体 响应状态吗 响应头 配置对象
+								//{unique: true}
+								console.log(data, status, headers, conf);
+								ngModel.$setValidity('unique', data.unique);
+							})
+						})
+					}
+
+				}
+			});
+
+</script>
