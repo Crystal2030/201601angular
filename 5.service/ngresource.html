@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html ng-app="bookMod">
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>directive</title>
+	<link rel="stylesheet" href="bootstrap.css"/>
+</head>
+<body ng-controller="bookCtrl as vm">
+<table class="table table-bordered">
+	<tr>
+		<td>ID</td>
+		<td>书名</td>
+		<td>操作</td>
+	</tr>
+	<tr ng-repeat="book in vm.books">
+		<td>{{book.id}}</td>
+		<td>{{book.name}}</td>
+		<td>
+			<button class="btn btn-warning" ng-click="vm.edit(book)">修改</button>
+			<button class="btn btn-danger" ng-click="vm.delete(book)">删除</button>
+		</td>
+	</tr>
+</table>
+
+<table class="table table-bordered">
+	<tr>
+		<td>ID</td>
+		<td>操作</td>
+	</tr>
+	<tr>
+		<td><input type="text" class="form-control" ng-model="vm.book.name"/></td>
+		<td>
+			<button ng-click="vm.add()" class="btn btn-primary">保存</button>
+		</td>
+	</tr>
+</table>
+</body>
+</html>
+<script src="angular.js"></script>
+<script src="angular-resource.min.js"></script>
+<script>
+	angular.module('bookMod', ['ngResource']);
+	angular.module('bookMod').factory('bookService', function($resource){
+		/**
+		 * url: 路径
+		 * 路径参数
+		 * 给返回值上添加自定义方法
+		 */
+		return $resource('/books/:id', {id: '@id'},{
+			update: {method: 'PUT'}
+		})
+	})
+	angular.module('bookMod')
+			.controller('bookCtrl', function($scope,bookService){
+				var vm = this;
+				vm.book = {};
+				bookService.query().$promise.then(function(books){
+					vm.books = books;
+				})
+				vm.books = [];
+				vm.add = function(){
+					var id = vm.book.id;
+					if(id){
+						bookService.update(vm.book).$promise.then(function(book){
+							vm.book = {};
+							vm.books.map(function(item){
+								if(item.id == id){
+									return book;
+								}else{
+									return item;
+								}
+							})
+						});
+					}else{
+						bookService.save(vm.book).$promise.then(function(book){
+							vm.book = {};
+							vm.books.push(book);
+						});
+					}
+
+				};
+				vm.delete = function(book){
+					bookService.delete(book).$promise.then(function(book){
+						var index = vm.books.indexOf(book);
+						vm.books.splice(index, 1);
+					});
+				};
+				vm.edit = function(book){
+					vm.book = book;
+				};
+			})
+</script>
