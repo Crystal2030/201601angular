@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app="helloModule">
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>angular</title>
+</head>
+<body>
+<div class="container"  ng-controller="filterCtrl">
+	<div class="row"  >
+		{{total | nc:1:'人民币'}}
+	</div>
+</div>
+</body>
+</html>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloModule', []);
+angular.module('helloModule').filter('nc', function(numberFilter, currencyFilter){
+	return function(input, limit, prefix){
+		return currencyFilter(numberFilter('88.888', limit), prefix);
+	}
+})
+angular.module('helloModule')
+		.controller('filterCtrl', function($scope, numberFilter, currencyFilter){
+			$scope.total = '888.8888';
+		});
+</script>

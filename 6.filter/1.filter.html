@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html ng-app="helloModule">
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>angular</title>
+</head>
+<body>
+<div class="container"  ng-controller="filterCtrl">
+	<div class="row"  >
+		{{99.999 | currency}}
+		{{88.777 | number:1}}
+		姓名：<input type="text" ng-model="search.name"/>
+		年龄：<input type="text" ng-model="search.$"/>
+		<button ng-click="order = 'age'">升序</button>
+		<button ng-click="order = '-age'">降序</button>
+		<table class="table table-responsive">
+			<tr>
+				<td>姓名</td>
+				<td>年龄</td>
+			</tr>
+			<tr ng-repeat="user in users | filter:search.name">
+				<td>{{user.name}}</td>
+				<td>{{user.age}}</td>
+			</tr>
+		</table>
+	</div>
+</div>
+</body>
+</html>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloModule', []);
+angular.module('helloModule')
+		.controller('filterCtrl', function($scope){
+			$scope.users = users = [{name:'crystal', age:6},{name:'xzw', age:16}];
+		});
+</script>

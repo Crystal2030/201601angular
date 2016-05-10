@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html ng-app="helloModule">
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>angular</title>
+</head>
+<body>
+<div class="container"  ng-controller="filterCtrl">
+	<div class="row"  >
+		{{total}}
+	</div>
+</div>
+</body>
+</html>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloModule', []);
+
+angular.module('helloModule')
+		.controller('filterCtrl', function($scope, numberFilter, currencyFilter){
+			$scope.total = currencyFilter(numberFilter('88.8888'),'人民币');
+		});
+</script>
