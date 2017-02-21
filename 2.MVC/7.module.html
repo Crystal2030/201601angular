@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod2">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body ng-controller="HelloCtrl">
+{{name}}
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+	angular.module('helloMod1', []);
+	angular.module('helloMod1')
+		.controller('HelloCtrl', function($scope){
+			$scope.name = 'module1'
+		})
+	angular.module('helloMod2', ['helloMod1']);
+	angular.module('helloMod2')
+		.controller('HelloCtrl', function($scope){
+			//module2下的name覆盖了module1的name值
+			$scope.name = 'module2'
+		})
+
+</script>
+</html>
