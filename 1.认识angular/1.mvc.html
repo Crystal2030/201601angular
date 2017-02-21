@@ -5,7 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-<div ng-controller="HelloCtrl">{{name}}
+<div ng-controller="HelloCtrl">
+    {{user.username}}
     {{add(1,2)}}
     {{add(3,2)}}
 </div>
@@ -23,10 +24,14 @@
     //viewModel:$scope     视图模型跟视图有关系的，会影响视图，视图与模型是双向交互的
 
     angular.module('helloAngular')
-        .controller('HelloCtrl', function($scope){
-            var user = {
+        .controller('HelloCtrl', function($scope,$http){
+//            $http:是对jquery ajax的封装
+            $http.get('user.json').success(function(data){
+                $scope.user = data.username;
+            })
+            /*var user = {
                 name: 'hello angular'
-            }
+            }*/
             $scope.name = 'angular'
             $scope.add = function(a,b){
                 return a+b;
