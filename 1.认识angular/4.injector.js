@@ -1,3 +1,8 @@
+/**
+ *
+ * @param 依赖注入：
+ * 函数里声明一个依赖，我们容器把需要依赖的东西实例化，传到参数中，让你的参数得以执行
+ */
 //这是要执行的函数
 var greet = function(words){
     console.log(words.text);
