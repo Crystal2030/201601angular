@@ -12,17 +12,18 @@ var obj = {name: 'angular'};
 function say(){
     console.log(this.name);
 }
-say();//undefined   this=window
-say.call(obj);//angular  this=obj
-say.mycall(obj);
+// say();//undefined   this=window
+// say.call(obj);//angular  this=obj
 
 Function.prototype.call()
 
 Function.prototype.mycall = function(thisObj){
     var source = this.toString();
-    source.replace(/this/, function(result){
+    console.log(source)
+    source = source.replace(/this/, function(result){
         return 'arguments[0]';
     })
-    console.log("source", source)
-    eval('('+ source + ')(' + thisObj + ')');
+    eval('('+ source + ')(thisObj)');
 }
+
+say.mycall(obj);//angular
