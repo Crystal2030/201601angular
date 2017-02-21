@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div{
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+<div ng-controller="ParentCtrl">
+    {{parent}}
+    {{child}}
+    <div ng-controller="ChildCtrl">
+        {{parent}}
+        {{child}}
+    </div>
+</div>
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloMod', []);
+angular.module('helloMod')
+    .controller('ParentCtrl', function($scope){
+        $scope.parent = 'parent'
+    })
+    .controller('ChildCtrl', function($scope){
+        $scope.child = 'child'
+    })
+
+</script>
+</html>

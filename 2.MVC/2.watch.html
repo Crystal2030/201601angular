@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div{
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+<div ng-init="isShow=true" >
+    <div ng-controller="WatchCtrl" ng-if="isShow">
+        <!--<input type="text" ng-model="age">-->
+
+        <input type="text" me-model="age">
+        <p>{{age}}</p>
+        <button ng-click="hide()">hide</button>
+    </div>
+</div>
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloMod', []);
+angular.module('helloMod')
+    .controller('WatchCtrl', function($rootScope,$scope,$timeout){
+        /*$timeout(function(){
+            console.log($scope,$scope.age)
+        },5000)*/
+        //每当age发生变化时，回调函数都会执行
+        $scope.$watch('age', function(newVal, oldVal){
+            console.log(newVal, oldVal);
+        })
+
+        $scope.hide = function(){
+            $rootScope.isShow = false;
+        }
+
+        $scope.$on('$destroy', function(){
+            console.log('destroy')
+        })
+    })
+
+    .directive('meModel', function(){
+        return {
+            link: function(scope,element,attrs){
+                //当input value发生变化的时候修改scope上对应的属性
+                element.on('change', function(){
+                    console.log(attrs)
+                    scope[attrs['meModel']] = element.val();
+                    //强行进行脏值检查
+                    scope.$apply();
+                })
+
+                scope.$watch(attrs['meModel'], function(newVal, oldVal){
+                    element.val(newVal);
+                })
+            }
+        }
+    })
+
+
+</script>
+</html>
