@@ -12,23 +12,46 @@ Scope.prototype.$watch = function(expr, listener){
 	this.$$watchers.push(watcher);
 
 }
-Scope.prototype.$apply = function(expr, listener){
+Scope.prototype.$digest = function(){
+	var dirty;
+	var count = 10;
+	do{
+		dirty = this.$digestOnce();
+		if(dirty && count==0){
+			throw Error("10 $digest() iterations reached. Aborting!")
+		}
+	}while(dirty && count--)
+}
+Scope.prototype.$digestOnce = function(expr, listener){
 	var self = this;
+	var dirty = false;//是否有脏数据，本次循环当中看看是否有变化的值
+
 	this.$$watchers.forEach(function(watcher){
 		var newVal = self[watcher.expr];
 		var oldVal = watcher.last;
-		console.log(newVal, oldVal)
 		if(newVal != oldVal){
 			watcher.fn(newVal, oldVal);
 			watcher.last = newVal;
+			dirty = true;//已将脏了
 		}
 	})
+	return dirty;
 };
+Scope.prototype.$apply = function(){
+	this.$digest();
+}
 var scope = new Scope();
-var age = 0;
-scope.age = age++;
-scope.$watch('age', function(newVal, oldVal){
-	console.log(newVal, oldVal);
+scope.one = 0;
+scope.two = 0;
+scope.$watch('one', function(newVal, oldVal){
+	scope.two = Math.random();
+	console.log(scope.two)
 })
-scope.age = age++;
+scope.$watch('two', function(newVal, oldVal){
+	scope.three = newVal;
+	scope.one = Math.random();
+	console.log(scope.one)
+
+})
+scope.one = 1;
 scope.$apply();

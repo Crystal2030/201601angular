@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div{
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+<div ng-init="isShow=true" >
+    <div ng-controller="WatchCtrl" ng-if="isShow">
+	    <input type="text" ng-model="one">
+	    <input type="text" ng-model="two">
+	    <input type="text" ng-model="three">
+    </div>
+</div>
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloMod', []);
+angular.module('helloMod')
+    .controller('WatchCtrl', function($rootScope,$scope,$timeout){
+		$scope.$watch('one', function(newVal, oldVal){
+			$scope.two = newVal;
+		})
+	    $scope.$watch('two', function(newVal, oldVal){
+		    $scope.three = newVal;
+		    $scope.one = Math.random();
+	    })
+    })
+
+
+
+</script>
+</html>

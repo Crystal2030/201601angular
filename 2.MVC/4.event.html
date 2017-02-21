@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div ng-controller="ParentCtrl">
+		{{parent}}{{count}}
+		<div ng-controller="ChildCtrl">
+			{{child}}{{count}}
+			<input type="text" ng-model="num">
+			<button ng-click="$emit('add', num)">向上传递</button>
+			<button ng-click="$broadcast('add', num)">向下传递</button>
+			<div ng-controller="GrandCtrl">
+				{{grand}}{{count}}
+			</div>
+		</div>
+	</div>
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloMod', []);
+angular.module('helloMod')
+	.controller('ParentCtrl', function($scope){
+		$scope.parent = 'parent';
+		$scope.count = 0;
+		$scope.$on('add', function(event,num){
+			$scope.count += $scope.count +1;
+		})
+	})
+	.controller('ChildCtrl', function($scope){
+		$scope.child = 'child';
+		$scope.count = 0;
+		$scope.$on('add', function(event,num){
+			$scope.count += $scope.count +1;
+		})
+	})
+	.controller('GrandCtrl', function($scope){
+		$scope.grand = 'grand';
+		$scope.count = 0;
+		$scope.$on('add', function(event,num){
+			$scope.count += $scope.count +1;
+		})
+	})
+
+
+</script>
+</html>
