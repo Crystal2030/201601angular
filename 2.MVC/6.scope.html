@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="content" ng-controller="TotalCtrl" ng-click="click()">
+	hello
+</div>
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloMod', []);
+angular.module('helloMod')
+	.controller('TotalCtrl', function($scope){
+		console.log($scope);
+		$scope.click = function(){
+			//angular.element得到一个jquery对象
+			var s = angular.element(document.querySelector('#content')).data('$scope')
+			console.log(s);
+		}
+	})
+
+function click(){
+
+}
+
+</script>
+</html>

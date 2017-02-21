@@ -35,6 +35,10 @@ angular.module('helloMod')
 		$scope.$on('add', function(event,num){
 			$scope.count += $scope.count +1;
 		})
+
+		$scope.$emit = function(type){
+
+		}
 	})
 	.controller('GrandCtrl', function($scope){
 		$scope.grand = 'grand';
