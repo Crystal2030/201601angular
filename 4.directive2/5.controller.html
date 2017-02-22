@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>directive-controller</title>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
+</head>
+<body class="container" ng-controller="HelloCtrl">
+
+    <girl caracter="beautiful,clever"></girl>
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloMod', []);
+
+//过滤器服务的名称就是 过滤器名字+Filter
+angular.module('helloMod')
+    .controller('HelloCtrl', function($scope){
+
+    })
+    .directive('girl', function(){
+        return {
+            restrict: 'E',
+            scope: true,
+            //link用来将指令隔离开来， controller用来定义可以复用的行为和可以提供给别的指令调用方法
+            //link里是形参，但是controller里面的参数是依赖注入进来的，是写死的
+            controller: function($scope, $element, $attrs){
+                $scope.caracteristics = [];
+                this.add = function(caracter){
+                    $scope.caracteristics.push(caracter);
+                }
+            },
+
+            template: '<h1>crystal</h1><div >{{caracteristics}}</div>',
+            link: function(scope, element, attrs){
+                element.bind('click', function(){
+                    alert(scope.caracteristics);
+                })
+            }
+        }
+    })
+
+    .directive('caracter', function(){
+        /** 前缀查找，可以修改查找控制器的行为
+        1. ?如果同级找不到，会赋null
+        2. ^ 在同级和上级中查找指令，找不到会报错
+        3. ^? 在统计和上级中查找指令，找不到赋值null
+        4. 没有前缀，在同级中查找，找不到会报错
+       */
+        return {
+            restrict: 'A',
+            //如果link有第四个参数controller，必须要指定require引用的指令名称
+            require: 'girl',
+            link: function(scope, element, attrs, girlCtrl){
+                attrs.caracter.split(',').forEach(function(item){
+                    girlCtrl.add(item);
+                })
+
+
+            }
+        }
+    })
+    /*.directive('beautiful', function(){
+        return {
+            restrict: 'A',
+            //如果link有第四个参数controller，必须要指定require引用的指令名称
+            require: 'girl',
+            link: function(scope, element, attrs, girlCtrl){
+
+                girlCtrl.add('beautiful');
+                console.log(girlCtrl)
+
+            }
+        }
+    })
+    .directive('clever', function(){
+        return {
+            restrict: 'A',
+            //如果link有第四个参数controller，必须要指定require引用的指令名称
+            require: 'girl',
+            link: function(scope, element, attrs, girlCtrl){
+
+                girlCtrl.add('clever');
+                console.log(girlCtrl)
+
+            }
+        }
+    })*/
+</script>
+</html>

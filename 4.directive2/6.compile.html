@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>directive-compile</title>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
+</head>
+<body class="container" ng-controller="HelloCtrl">
+
+    <div times="3">
+        <span>{{word}}</span>
+    </div>
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloMod', []);
+
+//过滤器服务的名称就是 过滤器名字+Filter
+angular.module('helloMod')
+    .controller('HelloCtrl', function($scope){
+
+    })
+    .directive('times', function(){
+        return {
+            restrict: 'A',
+            transclude: true,
+            template: '<div ng-transclude></div>',
+           /* link: function(scope,element,attrs){
+                scope.word = 'hello1'
+            },*/
+            //编译函数，对DOM模板进行编译，template替换之后，scope链接link函数执行前
+            compile: function(element, attrs){
+                console.log('开始编译')
+                var tpl =element.children();
+                for(var i=0; i<attrs.times-1; i++){
+                    element.append(tpl.clone());
+                }
+                return function(scope, element, attrs){//相当于link函数
+                    scope.word = 'hello2';
+                    console.log('链接函数-compile');
+
+                }
+
+            }
+        }
+    })
+
+
+</script>
+</html>

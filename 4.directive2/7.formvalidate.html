@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>form-validate</title>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
+</head>
+<body class="container" ng-controller="HelloCtrl">
+<!--当你在form上增加name属性后，在当前form表单所属的scope上多了一个跟name属性相同的$name属性：userform-->
+<form action="" name="userform" novalidate>
+    <div class="form-group" >
+        <label for="email" class="control-label">邮箱</label>
+        <input id="email" type="email" class="form-control" ng-model="email">
+    </div>
+    <div class="form-group">
+        <input type="button" class="btn btn-default" value="提交">
+    </div>
+
+    <pre>
+        {{userform | json}}
+    </pre>
+</form>
+
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloMod', []);
+
+//过滤器服务的名称就是 过滤器名字+Filter
+angular.module('helloMod')
+    .controller('HelloCtrl', function($scope){
+
+    })
+
+
+
+</script>
+</html>
