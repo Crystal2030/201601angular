@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>ng-class</title>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
+</head>
+<body ng-controller="HelloCtrl">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li role="presentation" ng-click="selectedMenu = 'Home'" ng-class="{active:selectedMenu=='Home'}"><a href="#">Home</a></li>
+            <li role="presentation" ng-click="selectedMenu = 'Profile'" ng-class="{active:selectedMenu=='Profile'}"><a href="#">Profile</a></li>
+            <li role="presentation" ng-click="selectedMenu = 'Messages'" ng-class="{active:selectedMenu=='Messages'}"><a href="#">Messages</a></li>
+        </ul>
+        <form action="">
+            <div class="form-group" ng-class="{'has-error': username.length<=3, 'has-warning': username.length<=6, 'has-success': username.length>=6}">
+                <label class="control-label" for="username">用戶名</label>
+                <input type="text" class="form-control" id="username" ng-model="username">
+            </div>
+        </form>
+    </div>
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloMod', []);
+
+angular.module('helloMod')
+    .controller('HelloCtrl', function($scope){
+        $scope.selectedMenu = 'Home';
+        $scope.phones = [
+            {name:'iphone', price: 1},
+            {name:'xiaomi', price: 2},
+            {name:'oppo', price: 12},
+            {name:'blackberry', price: 3},
+        ]
+
+    })
+
+</script>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div ng-controller="HelloCtrl">
+    <input type="text"  me-model="name">
+    {{name}}
+</div>
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloMod', []);
+
+angular.module('helloMod')
+    .controller('HelloCtrl', function($scope){
+
+    })
+    .directive('meModel', function(){
+        return {
+            link: function(scope, element, attrs){
+                element.on('change', function(){
+                    console.log(scope, element, attrs);
+                    scope[attrs['meModel']] = element.val();
+                    scope.$apply();
+                })
+
+                scope.$watch(attrs['meModel'], function(newVal, oldVal){
+                    console.log(newVal, oldVal)
+                    element.val(newVal)
+                })
+            }
+        }
+    })
+</script>
+</html>

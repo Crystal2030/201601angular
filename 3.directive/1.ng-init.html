@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div ng-init="obj={name: 'directive'}">
+    {{obj.name}}
+    <span ng-bind="obj.name"></span>
+</div>
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloMod', []);
+</script>
+</html>
