@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>directive-transclude</title>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+    <dialog>
+        <div>这是我内部的内容</div>
+    </dialog>
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloMod', []);
+
+angular.module('helloMod')
+    .directive('dialog', function(){
+        return {
+            //A:Attribute E:Element M:Comment C: Class
+            restrict: 'AEMC',//限定指令出现的位置AEMC
+            replace: true,//会把指令本身替换掉
+            transclude: true,//保留原来指令内部元素，并且自动插入到转换后末班内部具有ng-transclude指令的元素内部
+            template: '<div class="panel panel-default"><div class="panel panel-header">头部</div><div class="panel-body" ng-transclude></div> </div>'
+        }
+    })
+
+</script>
+</html>

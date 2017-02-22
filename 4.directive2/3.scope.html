@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>directive-scope</title>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
+</head>
+<body class="container">
+<div ng-controller="HelloCtrl">
+    张三：{{zhangsan}}
+    李四： {{lisi}}
+    <at-person name="33"></at-person>
+    <at-person name="44"></at-person>
+    <at-person name="{{zhangsan}}"></at-person>
+    <at-person name="{{lisi}}"></at-person>
+    <hr>
+    <eq-person name="lisi" greet="greet(name)"></eq-person>
+    <eq-person name="zhangsan" greet="greet(name)"></eq-person>
+</div>
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloMod', []);
+
+angular.module('helloMod')
+    .controller('HelloCtrl', function($scope){
+        $scope.zhangsan = 'zhangsan';
+        $scope.lisi = 'lisi';
+        $scope.greet = function(name){
+            alert('Hello angular' + name);
+        }
+    })
+    .directive('atPerson', function(){
+        return {
+            //A:Attribute E:Element M:Comment C: Class
+            restrict: 'AEMC',//限定指令出现的位置AEMC
+            //replace: true,//会把指令本身替换掉
+            //transclude: true,//保留原来指令内部元素，并且自动插入到转换后末班内部具有ng-transclude指令的元素内部
+            //scope: true,//每个指令拥有自己独立的scope
+            scope: {
+                name: '@name'//当前scope上的name属性引用指令上name属性的字面量值
+            },
+            template: '<div><input type="text" ng-model="name" />姓名：{{name}}</div>'
+        }
+    })
+    .directive('eqPerson', function(){
+        return {
+            //A:Attribute E:Element M:Comment C: Class
+            restrict: 'AEMC',//限定指令出现的位置AEMC
+            //replace: true,//会把指令本身替换掉
+            //transclude: true,//保留原来指令内部元素，并且自动插入到转换后末班内部具有ng-transclude指令的元素内部
+            //scope: true,//每个指令拥有自己独立的scope
+            scope: {
+                name: '=name',//与父scope双向数据绑定
+                greet: '&' //传递一个来自父scope的函数
+            },
+            template: '<div><input type="text" ng-model="name" />姓名：{{name}} <button ng-click="greet({name:name})">greet</button></div>'
+        }
+    })
+
+</script>
+</html>

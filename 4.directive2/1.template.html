@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>directive-template</title>
+</head>
+<body ng-controller="HelloCtrl">
+    <span me-student></span>
+    <me-student></me-student>
+    <span class="me-student"></span>
+    <!--directive:me-student-->
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloMod', []);
+
+angular.module('helloMod')
+    .directive('meStudent', function(){
+        return {
+            //A:Attribute E:Element M:Comment C: Class
+            restrict: 'AEMC',//限定指令出现的位置AEMC
+            replace: true,//会把指令本身替换掉
+            template: '<p>my directive</p>'
+        }
+    })
+
+</script>
+</html>
