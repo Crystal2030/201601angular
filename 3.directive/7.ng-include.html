@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>ng-include</title>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
+</head>
+<body ng-controller="HelloCtrl">
+<div ng-include="'header.html'"></div>
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloMod', []);
+
+angular.module('helloMod')
+    .controller('HelloCtrl', function($scope){
+
+    })
+
+</script>
+</html>

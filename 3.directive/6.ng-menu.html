@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>ng-class</title>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
+</head>
+<body ng-controller="HelloCtrl">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <!--每個repeat是独立作用域，改变的是当前作用域的selectedMenu,所以不能修改其他两个-->
+            <!--<li ng-repeat="menu in menus" role="presentation" ng-click="selectedMenu = menu.name" ng-class="{active:selectedMenu==menu.name}"><a href="#">{{menu.name}}</a></li>-->
+            <!--解决方法，定义一个click，那么li自己的作用域中没有，就会向父级作用域上查找，给三个li父scope赋值，变成三份scope了-->
+            <li ng-repeat="menu in menus" role="presentation" ng-click="click(menu.name)" ng-class="{active:selectedMenu==menu.name}"><a href="#">{{menu.name}}</a></li>
+        </ul>
+        <form action="">
+            <div class="form-group" ng-class="{'has-error': username.length<=3, 'has-warning': username.length<=6, 'has-success': username.length>=6}">
+                <label class="control-label" for="username">用戶名</label>
+                <input type="text" class="form-control" id="username" ng-model="username">
+            </div>
+        </form>
+    </div>
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('helloMod', []);
+
+angular.module('helloMod')
+    .controller('HelloCtrl', function($scope){
+        $scope.selectedMenu = 'Home';
+        $scope.menus = [
+            {name:'Home'},
+            {name:'Profile'},
+            {name:'message'},
+        ]
+
+        $scope.click = function(name){
+            $scope.selectedMenu = name;
+        }
+
+    })
+
+</script>
+</html>
