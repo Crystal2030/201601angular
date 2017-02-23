@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>unique user</title>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
+</head>
+<body class="container" ng-controller="HelloCtrl">
+<!--当你在form上增加name属性后，在当前form表单所属的scope上多了一个跟name属性相同的$name属性：userform-->
+<form action="" name="userform" novalidate>
+    <div class="form-group"  ng-class="{'has-error':userform.username.$invalid && userform.email.$dirty}">
+        <label for="username" class="control-label">用户名</label>
+        <input id="username" unique-user type="text" name="username" class="form-control" ng-model="user.username" ng-minlength="3" ng-required="">
+    </div>
+    <div class="form-group">
+        <input  type="button" ng-disabled="userform.$pristine || (userform.$dirty&&userform.$invalid)" class="btn btn-default" value="提交">
+    </div>
+
+    <pre>{{userform | json}}    </pre>
+
+</form>
+
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+    angular.module('helloMod', []);
+
+    //过滤器服务的名称就是 过滤器名字+Filter
+    angular.module('helloMod')
+        .constant('errors',{
+            'email': '邮箱输入不合法',
+            'minlenght': '最小长度不够'
+        })
+        .controller('HelloCtrl', function($scope){
+            $scope.user = {};
+        })
+
+        .filter('error', function(errors){
+            return function(input){
+                console.log(input);
+                return errors[input];
+            }
+        })
+
+        .directive('uniqueUser', function($http){
+            return {
+                restrict: 'A',
+                require: 'ngModel',
+                link: function(scope, element, attrs, ngModelCtrl){
+                    scope.$watch(attrs['ngModelCtrl'], function(newVal){
+                        $http({
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            url: 'http://localhost:8080/user/check',
+                            data: {username: newVal}
+                        }).success(function(data,status,headers, conf){//相应提 响应状态码 响应头 配置对象
+                            console.log(data,status,headers, conf)
+                            ngModelCtrl.$setValidity('uniqueUser', data.unique)
+                        })
+                    })
+                }
+            }
+        })
+
+
+
+</script>
+</html>
