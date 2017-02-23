@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="resourceMod">
+<head>
+    <meta charset="UTF-8">
+    <title>service</title>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <!--
+        当你不注入$scope,可以给this赋值，到时候可以把controller实例给new出来
+
+        controllerAs vm 会把控制器实例 = vm
+            -->
+    <div class="row" ng-controller="ResourceCtrl as vm">
+        <div class="col-xs-4 col-xs-offset-4">
+            <input type="text" ng-model="vm.a" class="form-control">
+            <select name="" id="" ng-model="vm.operate" class="form-control">
+                <options >
+                    <option value="+">+</option>
+                    <option value="-">-</option>
+                    <option value="*">*</option>
+                    <option value="/">/</option>
+                </options>
+            </select>
+            <input type="text" ng-model="vm.b" class="form-control">
+            <button class="btn btn-primary" ng-click="vm.doCal()">=</button>
+
+            <div  ng-bind="vm.result"></div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
+
+<script src="../lib/angular/angular.js"></script>
+<script src="../lib/angular-resource/angular-resource.js"></script>
+<script>
+    angular.module('resourceMod', []);
+
+    angular.module('resourceMod').value('prefix', '￥');
+    angular.module('resourceMod').constant('person', {name: 'eee'});
+    angular.module('resourceMod').config(function(person){person.name = 'fff'})
+
+
+    angular.module('resourceMod')
+
+        .service('calculator', function(){
+            this.prefix = '$';
+            this['+'] = function(a,b){return this.prefix+ (parseInt(a)+parseInt(b))};
+            this['-'] = function(a,b){return this.prefix+ (parseInt(a)-parseInt(b))};
+            this['*'] =  function(a,b){return this.prefix+ (parseInt(a)*parseInt(b))};
+            this['/'] =  function(a,b){return this.prefix+ (parseInt(a)/parseInt(b))};
+        });
+
+    angular.module('resourceMod')
+        .controller('ResourceCtrl', function(calculator){
+            var vm = this;
+            vm.name = 'crystal';
+            vm.doCal = function(){
+                console.log(vm.operate,vm.a, vm.b)
+                vm.result = calculator[vm.operate](vm.a, vm.b)
+            }
+
+        });
+
+
+</script>

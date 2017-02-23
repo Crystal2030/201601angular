@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="helloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>ngResource</title>
+</head>
+<body>
+<div ng-controller="HelloCtrl" class="container">
+    <ul class="list-group" keyword="crystal">
+        <li class="list-group-item" ng-repeat="item in items">{{item}}</li>
+    </ul>
+</div>
+</body>
+</html>
+
+<script src="../lib/angular/angular.min.js"></script>
+<script src="../lib/angular-resource/angular-resource.min.js"></script>
+<script>
+    angular.module('helloMod', []);
+
+    angular.module('helloMod')
+        .controller('HelloCtrl', ['$http',  function(){
+           //待完成
+        }]);
+
+    angular.module('helloMod')
+        .directive('keyword', function($http,$window){
+            return {
+                link: function(scope, element, attrs){
+                    $http.jsonp('http://suggestion.com/su?wd='+attrs['keyword']+'&cb=show');
+                    $window.show = function(data){
+                        console.log(data);
+                        scope.items = data.s;
+                    }
+
+                }
+            }
+        })
+</script>

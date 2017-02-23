@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="resourceMod">
+<head>
+    <meta charset="UTF-8">
+    <title>controlle as</title>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <!--
+        当你不注入$scope,可以给this赋值，到时候可以把controller实例给new出来
+
+        controllerAs vm 会把控制器实例 = vm
+            -->
+    <div class="row" ng-controller="ResourceCtrl as vm">
+        <div class="col-xs-4 col-xs-offset-4">
+            <input type="text" ng-model="vm.a" class="form-control">
+            <select name="" id="" ng-model="vm.operate" class="form-control">
+                <options >
+                    <option value="+">+</option>
+                    <option value="-">-</option>
+                    <option value="*">*</option>
+                    <option value="/">/</option>
+                </options>
+            </select>
+            <input type="text" ng-model="vm.b" class="form-control">
+            <button class="btn btn-primary" ng-click="vm.doCal()">=</button>
+
+            <div  ng-bind="vm.result"></div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
+
+<script src="../lib/angular/angular.js"></script>
+<script src="../lib/angular-resource/angular-resource.js"></script>
+<script>
+    angular.module('resourceMod', []);
+
+    angular.module('resourceMod')
+        .provider('calculatorProvider', function(){
+            /**
+             * 1.这个构造函数先被new出来
+             * 2.调用$get的方法
+             * 3.把return的对象注入到需要注入的地方
+             */
+            this.$get = function(){
+                return {
+                    '+': function(a,b){return a+b},
+                    '-': function(a,b){return a-b},
+                    '*': function(a,b){return a*b},
+                    '/': function(a,b){return a/b},
+                }
+            }
+        });
+
+    angular.module('resourceMod')
+        .controller('ResourceCtrl', function(calculatorProvider){
+            var vm = this;
+            vm.name = 'crystal';
+            vm.doCal = function(){
+                console.log(vm.operate,vm.a, vm.b)
+                vm.result = calculatorProvider[vm.operate](vm.a, vm.b)
+            }
+
+        });
+
+
+</script>

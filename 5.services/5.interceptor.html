@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="interceptorMod">
+<head>
+    <meta charset="UTF-8">
+    <title>interceptor</title>
+</head>
+<body>
+<div class="alert alert-danger">{{message}}</div>
+<div ng-controller="InterceptorCtrl"></div>
+</body>
+</html>
+
+<script src="../lib/angular/angular.min.js"></script>
+<script src="../lib/angular-resource/angular-resource.min.js"></script>
+<script>
+    angular.module('interceptorMod', []);
+
+    angular.module('interceptorMod').config(function($httpProvider){
+        $httpProvider.interceptors.push('meInterceptor');
+    })
+
+
+    angular.module('interceptorMod')
+        .factory('meInterceptor', function($rootScope){
+            return {
+                /**
+                 * 会在$http发送到后台之前执行，在这里你可以修改配置
+                 * 接收配置对象作为参数，必须返回配置对象或者promise
+                 * 如果返回无效的配置对象，或者promise拒绝，则$http调用失败
+                 */
+                'request': function(config){
+                    console.log('request')
+                    return config;
+                },
+                //该方法会在http接收到后台的响应是执行，你可以修改响应
+                //接收响应对象作为参数，必须返回响应对象或者promise
+                //相应对象包括了请求配置，请求头 状态 和相应体
+                'response': function(response){
+                    response.data = response.data.name.toUpperCase();
+                    console.log('response')
+                    return response;
+                },
+                /**
+                 * 当请求发送失败或被拦截器拒绝时进行回调
+                 */
+                'requestError': function(){
+                    console.log('requestError')
+                },
+                /**
+                 * 如果后台响应失败了
+                 */
+                'responseError': function(){
+                    switch(rejection.status){
+                        case 401:
+                            $rootScope.messege = '没有登录';
+                            console.log('没有登录');
+                            break;
+                        case 403:
+                            $rootScope.messege = '没有权限';
+                            console.log('没有权限');
+                            break;
+                        case 404:
+                            $rootScope.messege = '找不到页面';
+                            console.log('找不到页面');
+                            break;
+                        case 500:
+                            $rootScope.messege = '服务端错误';
+                            console.log('服务端错误');
+                            break;
+                        default:
+                            console.log('default');
+                            break;
+                    }
+                    console.log('responseError')
+                }
+            }
+        });
+
+    angular.module('interceptorMod')
+        .controller('InterceptorCtrl', ['$http',  function($http){
+           //config就是请求的配置对象
+            $http
+                .get('http://localhost:8080')
+                .then(function(data, status, headers, config){
+                console.log(arguments)
+            }).catch(function(){
+                console.error(arguments);
+            });
+        }]);
+
+
+</script>
