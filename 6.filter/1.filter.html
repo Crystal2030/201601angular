@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="HelloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>filter</title>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="row" ng-controller="HelloCtrl as vm">
+        {{99.999 | currency}}
+        {{"888.9909" | number:1}}
+        {{count}}
+        姓名： <input type="text" ng-model="search.name">
+        年龄： <input type="text" ng-model="search.$">
+        <button ng-click="order = 'age'" class="btn btn-default">升序</button>
+        <button ng-click="order = '-age'" class="btn btn-default">降序</button>
+        <table class="table table-responsive">
+            <tr>
+                <td>姓名</td>
+                <td>年龄</td>
+            </tr>
+            <tr ng-repeat="user in vm.users | filter: search | orderBy: order">
+                <td>{{user.name}}</td>
+                <td>{{user.age}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
+<script src="../lib/angular/angular.js"></script>
+<script>
+    angular.module('HelloMod', []);
+    angular.module('HelloMod')
+        .controller('HelloCtrl', function(){
+            var vm = this;
+            this.users = [
+                {name: 'crystal1', age: 18},
+                {name: 'alpha', age: 60},
+            ]
+        })
+</script>

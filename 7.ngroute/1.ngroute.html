@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="HelloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>filter</title>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container" ng-controller="HelloCtrl">
+    <div class="row">
+        <ul>
+            <a ng-click="$location.path('index')" href="">index</a>
+            <a ng-click="$location.path('users')" href="">users</a>
+            <a ng-click="$location.path('book')" href="">book</a>
+            <a ng-click="$location.path('settings')" href="">settings</a>
+        </ul>
+        <button ng-click="goUser()">登陆</button>
+        <div ng-view class="container"></div>
+    </div>
+</div>
+</body>
+</html>
+<script src="../lib/angular/angular.js"></script>
+<script src="../lib/angular-route/angular-route.js"></script>
+<script>
+    /**
+     * 1. 监听锚点变化
+     * 2. 渲染模板得到html代码片段
+     *      如果是template直接渲染
+     *      如果是templateurl，先获取文件内容再渲染
+     * 3. 清空原来的div，把片段放进去
+     */
+    angular.module('HelloMod', ['ngRoute']);
+    angular.module('HelloMod')
+        .config(function($routeProvider){
+            $routeProvider
+                .when('/index', {
+                    template: 'index'
+                })
+                .when('/book', {
+                    template: 'book'
+                })
+                .when('/users', {
+                    templateUrl: 'users.html',
+                    controller: 'UserCtrl'
+                })
+                .when('/user/:id', {
+                    template: '{{id}}',
+                    controller: function($scope, $routeParams){
+                        $scope.id = $routeParams.id;
+                    }
+                })
+                .when('/settings', {
+                    template:'settings'
+                })
+                .otherwise({
+                    redirectTo: '/'
+                })
+        })
+
+    angular.module('HelloMod')
+        .controller('HelloCtrl', function($scope, $location){
+            $scope.$location = $location;
+            $scope.goUser = () => {
+                $location.path('/users');
+            }
+        })
+        .controller('UserCtrl', function($scope){
+            $scope.title = 'Hello User';
+        })
+    //这是系统启动后的第一个方法
+    angular.module('HelloMod')
+        .run(function($rootScope, $route){
+            $rootScope.$on('$routeChangeStart', function(event, from, to){
+                console.log(event, from, to);
+                console.log($route, '*******')
+                if(to.$$route.originalPath == '/settings'){
+                   //用户登录之后，会把用户信息赋值给me
+                    if($rootScope.me){
+                        //me有值，就不管他
+
+                    }else{
+                        alert('禁止访问');
+                        return false;
+                    }
+                }
+            })
+        })
+</script>

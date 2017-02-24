@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="uiMod">
+<head>
+    <meta charset="UTF-8">
+    <title>ui-route</title>
+</head>
+<body ng-controller="UiCtrl">
+<ul>
+    <li><a ui-sref="index">index</a></li>
+    <li><a ui-sref="users">users</a></li>
+</ul>
+<button ng-click="goUsers()">users</button>
+<div ui-view></div>
+</body>
+</html>
+<script src="../angular.js"></script>
+<script src="../angular-ui-router.js"></script>
+<script>
+    angular.module('uiMod', ['ui.router']);
+
+    angular.module('uiMod')
+        .config(function($stateProvider, $urlRouterProvider){
+            $urlRouterProvider.otherwise('/index');
+            $stateProvider.state('index', {
+                url: '/index',
+                template: '<h1>hello index</h1>'
+            }).state('users', {
+                url: '/users',
+                templateUrl: 'users.html',
+                controller: function($scope, $http, title, users){
+                    console.log(title, users)
+                    $scope.title = title.name;
+                    $scope.users = users;
+                    console.log($scope.users)
+                },
+                need_login: true,//状态的自定义属性
+                onEnter: function(){//当进入路由的时候
+                    alert('当进入路由的时候');
+                },
+                onExit: function(){//当退出路由的时候
+                    alert('当退出路由的时候');
+
+                },
+                //定义两个服务，服务可以是同步，也可以是一部，可以返回对象，也可以返回promise
+                resolve: {
+                    title: function(){
+                        return {name: '用户列表'}
+                    },
+                    users: function($q, $timeout){
+                        var defer = $q.defer();
+                        $timeout(function(){
+                            defer.resolve(['stu1','stu2']);
+//                            defer.reject('失败');
+//                            alert('跳转失败');
+                        }, 1000)
+                        return defer.promise;
+                    }
+                }
+            })
+        })
+
+    angular.module('uiMod')
+        .controller('UiCtrl', function($scope, $state){
+            $scope.goUsers = function(){
+                $state.go('users')
+            };
+        });
+
+    angular.module('uiMod')
+        .run(function($rootScope, $state){
+            $rootScope.$on('$stateChangeStart',function (event, toState, toParams, fromState, fromParams) {
+               if(toState.need_login){
+                   if(!$rootScope.me){//如果没有登录
+                       alert('你还没登录');
+                       event.preventDefault();
+                       $state.go('index');
+                       return;
+                   }
+               }
+
+            });
+
+            $rootScope.$on('$stateNotFound',function (event, toState, toParams, fromState, fromParams) {
+               alert('状态无效');
+                state.go('index');
+            });
+            $rootScope.$on('$stateChangeError',function (event, toState, toParams, fromState, fromParams) {
+                alert('状态出错')
+                state.go('index');
+            });
+
+
+        })
+</script>

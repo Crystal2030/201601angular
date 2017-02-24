@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="HelloMod">
+<head>
+    <meta charset="UTF-8">
+    <title>filter</title>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="row" ng-controller="HelloCtrl">
+        {{total | nc: 1 : '人民币'}}
+    </div>
+</div>
+</body>
+</html>
+<script src="../lib/angular/angular.js"></script>
+<script>
+    angular.module('HelloMod', []);
+
+    angular.module('HelloMod')
+        .filter('nc', function( numberFilter, currencyFilter){
+            return function(input, limit, prefix){
+                return currencyFilter(numberFilter(input, limit), prefix);
+            }
+        })
+
+    angular.module('HelloMod')
+        .controller('HelloCtrl', function($scope){
+            $scope.total = "88.8888";
+        })
+</script>
