@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="bookMod">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/bootstrap.css">
+</head>
+<body ng-controller="BookCtrl as vm">
+<!--当前选中书展示-->
+<table class="table table-bordered">
+    <tr>
+        <td>ID</td>
+        <td>书名</td>
+    </tr>
+    <tr>
+        <td>{{vm.book.id}}</td>
+        <td>{{vm.book.name}}</td>
+    </tr>
+</table>
+
+<!--书列表-->
+<table class="table table-bordered">
+    <tr>
+        <td>ID</td>
+        <td>书名</td>
+        <td>操作</td>
+    </tr>
+    <tr ng-repeat="book in vm.books">
+        <td>{{book.id}}</td>
+        <td>{{book.name}}</td>
+        <td>
+            <button ng-click="vm.edit(book)" class="btn btn-warning">修改</button>
+            <button ng-click="vm.delete(book)" class="btn btn-danger">删除</button>
+        </td>
+    </tr>
+</table>
+
+
+<!--编辑-->
+<table class="table table-bordered">
+    <tr>
+        <td>书名</td>
+        <td>操作</td>
+    </tr>
+    <tr>
+       <td><input type="text" class="form-control" ng-model="vm.book.name"></td>
+        <td>
+            <button ng-click="vm.add()" class="btn btn-primary">保存</button>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
+
+<script src="angular.js"></script>
+<script src="angular-resource.min.js"></script>
+<script>
+    angular.module('bookMod', ['ngResource']);
+
+    angular.module('bookMod')
+        .factory('bookService', function($resource){
+            /**
+             * 三个参数：
+             * url 路径
+             * 配置：参数的
+             * 自定义方法
+             */
+            return $resource('/books/:id',{id:'@id'},{
+                update:{method: 'PUT'}
+            });
+        })
+
+    angular.module('bookMod')
+        .controller('BookCtrl', function(bookService){
+            var vm = this;
+            vm.book = {};
+            bookService.query().$promise.then(function(books){
+                vm.books = books;
+            })
+            vm.books = [];
+            vm.add = function(){
+                var id = vm.book.id;
+                if(id){
+                    bookService.update(vm.book).$promise.then(function(book){
+                        vm.book = {};
+                        vm.books.map(function(item){
+                            if(item.id == id){
+                                return book;
+                            }else{
+                                return item;
+                            }
+                        })
+                    });
+                }else{
+                    bookService.save(vm.book).$promise.then(function(book){
+                        vm.book = {};
+                        vm.books.push(book);
+                    });
+                }
+
+            };
+            vm.delete = function(book){
+                bookService.delete(book).$promise.then(function(book){
+                    var index = vm.books.indexOf(book);
+                    vm.books.splice(index, 1);
+                });
+            };
+            vm.edit = function(book){
+                vm.book = book;
+            };
+        })
+</script>
