@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="animateMod">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<style>
+		.box{
+			background-color: green;
+			color: red;
+			transition: 1s all;
+		}
+		.box.ng-enter{
+			opcity: 0;
+		}
+		.box.ng-enter-active{
+			opacity: 1;
+		}
+		.box.ng-leave{
+			opacity: 0;
+		}
+		.box.ng-leave-active{
+			opacity: 1;
+		}
+	</style>
+</head>
+<body ng-controller="AnimateCtrl">
+<input type="button" ng-click="show()" value="显示">
+<ul>
+	<li class="box" ng-repeat="book in books">{{book.name}}</li>
+</ul>
+</body>
+</html>
+<script src="../lib/angular/angular.min.js"></script>
+<script src="../lib/angular-animate/angular-animate.min.js"></script>
+<script>
+	angular.module('animateMod', ['ngAnimate']);
+
+	angular.module('animateMod')
+		.controller('AnimateCtrl', function($scope){
+			$scope.show = function(){
+				$scope.books = [
+					{name: 'java'},
+					{name: 'node.js'},
+					{name: 'vue.js'},
+					{name: 'angular.js'},
+				]
+			}
+
+		})
+</script>
