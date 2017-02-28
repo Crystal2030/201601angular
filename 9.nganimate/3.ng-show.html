@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="animateMod">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<style>
+		.box{
+			width: 200px;
+			height: 200px;
+			background-color: green;
+			position: absolute;
+			transition: 1s all;
+		}
+		.box.ng-hide-add{
+			opcity: 0;
+		}
+		.box.ng-hide-add-active{
+			opacity: 1;
+		}
+		.box.ng-hide-remove{
+			opacity: 0;
+		}
+		.box.ng-hide-remove-active{
+			opacity: 1;
+		}
+		.red{
+			background: red;
+		}
+		.green{
+			background-color: green;
+		}
+
+	</style>
+</head>
+<body>
+<!--<input type="checkbox" ng-model="check">
+<div class="box" ng-show="check">
+	hello
+</div>-->
+<input type="checkbox" ng-model="red">红
+<input type="checkbox" ng-model="green">绿
+<div class="box" ng-class="{red: red, greed: green}">world</div>
+</body>
+</html>
+<script src="../lib/angular/angular.min.js"></script>
+<script src="../lib/angular-animate/angular-animate.min.js"></script>
+<script>
+	angular.module('animateMod', ['ngAnimate']);
+
+	angular.module('animateMod')
+		.controller('AnimateCtrl', function($scope){
+
+		})
+</script>
