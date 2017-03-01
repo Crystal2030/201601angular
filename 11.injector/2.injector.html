@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="body1" ng-app="zfpxMod">
+<div ng-controller="zfpxCtrl">
+    <button ng-click="show()">显示</button>
+</div>
+</body>
+</html>
+<script src="angular.js"></script>
+<script>
+    angular.module('zfpxMod', [])
+        .provider('hello', function(){
+            //必须提供一个$get方法
+            this.$get = function(){
+                return 'hello';
+            }
+        });
+    angular.module('zfpxMod')
+        .controller('zfpxCtrl', function($scope){
+            $scope.show = function(){
+                //得到angular自己启动创建的注射器
+                var injector = angular.element(document.querySelector('#body1'))
+                    .data('$injector');
+                console.log(injector)
+                //实例化参数对象并且执行次函数
+                injector.invoke(function(hello){
+                    console.log(hello)
+                });
+                //获取指定名称的服务实例
+                var h = injector.get('hello');
+                console.log(h);
+                //可以获取函数的参数，把形参签名转成字符串数组
+                var args = injector.annotate(function(a,b){
+                    console.log("annotate")
+                });
+                console.log(args);
+
+                injector.has('$http');//true
+                injector.has('hello');//true
+                injector.has('hello111');//false
+
+                //实例化一个构造函数
+                //为什么不直接new呢？
+                //自己的服务不能直接拿到，只能借助注射器
+                var obj = injector.instantiate(function($http, hello){
+                    this.$http = $http;
+                    this.hello = hello;
+                })
+                console.log(obj);
+            }
+        })
+    //angular.element = $ = jQuery
+    //当angular启动的时候会先创建一个注射器
+    angular.element(document).ready(function(){
+
+
+    })
+</script>

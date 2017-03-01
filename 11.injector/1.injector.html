@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<script src="angular.js"></script>
+<script>
+    angular.module('zfpxMod', [])
+        .provider('hello', function(){
+            //必须提供一个$get方法
+            this.$get = function(){
+                return 'hello';
+            }
+        })
+    //angular.element = $ = jQuery
+    angular.element(document).ready(function(){
+        //创建injector, 返回一个注射器
+        //注射器是个配方库， 里面放服务的名称和服务的定义
+        var injector = angular.injector(['ng', 'zfpxMod']);
+        console.log(injector)
+        //invoke自动注入函数的参数并调用函数
+        injector.invoke(function(hello){
+            console.log(hello)
+        });
+
+    })
+</script>
