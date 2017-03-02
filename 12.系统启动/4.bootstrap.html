@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body >
+<button onclick="start()">Start</button>
+<pig></pig>
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('zfpxMod', []);
+
+angular.module('zfpxMod')
+    .controller('zfpxCtrl', function($scope){
+
+    });
+
+angular.module('zfpxMod')
+    .directive('pig', function(){
+        return {
+            restrict: 'E',
+            replace: true,
+            template: '<img src="pig.jpg" width="300" height="300" />'
+        }
+    })
+
+function start() {
+    var second = document.querySelector('#second');
+    //利用angular.bootstrap()方法进行手动引导
+    //agular.bootstrap(element, [modules], [config])
+    //angular.bootstrap(second, ['zfpxMod']);
+
+    //自己实现bootstrap方法
+    //1.创建注射器对象并保存到根对象的data里
+    var injector = angular.injector(['ng','zfpxMod']);
+    angular.element(document).data('$injector', injector);
+    //2. 创建根作用域，并保存到data里
+    var rootScope = injector.get("$rootScope");
+    angular.element(document).data('$rootScope', rootScope);
+    //3. 编译dom元素子树
+    var compile = injector.get('$compile');
+    //从根节点开始编译
+    compile(document)(rootScope);
+}
+</script>
+</html>

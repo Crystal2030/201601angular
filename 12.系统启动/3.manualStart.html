@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body >
+<div ng-app="zfpxMod"><span ng-controller="zfpxCtrl">{{name}}</span></div>
+<div id="second" ng-app="zfpxMod"><span ng-controller="zfpxCtrl">{{name}}</span></div>
+<button onclick="start()">start</button>
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+angular.module('zfpxMod', []);
+
+angular.module('zfpxMod')
+    .controller('zfpxCtrl', function($scope){
+       $scope.name = 'only one';
+    });
+
+function start() {
+    var second = document.querySelector('#second');
+    //利用angular.bootstrap()方法进行手动引导
+    //agular.bootstrap(element, [modules], [config])
+    angular.bootstrap(second, ['zfpxMod']);
+}
+start();
+</script>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="zfpxMod">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<pig></pig>
+</body>
+<script src="../lib/angular/angular.js"></script>
+<script>
+    angular.module('zfpxMod', []);
+
+    angular.module('zfpxMod')
+        .directive('pig', function(){
+            return {
+                restrict: 'E',
+                replace: true,
+                template: '<img src="pig.jpg" width="300" height="300" />'
+            }
+        })
+</script>
+</html>
